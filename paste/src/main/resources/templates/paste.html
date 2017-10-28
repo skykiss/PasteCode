@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>贴代码</title>
+    <meta name="keyword" content="贴代码,pastecode">
+    <meta name="description" content="一个贴代码的网站">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!--下面两个是使用Code Mirror必须引入的-->
+    <link rel="stylesheet" th:href="@{css/codemirror.css}">
+    <script th:src="@{js/codemirror.js}"></script>
+    <script th:src="@{js/javascript.js}"></script>
+    <script th:src="@{js/clike.js}"></script>
+    <script th:src="@{js/python.js}"></script>
+    <script th:src="@{js/php.js}"></script>
+    <script th:src="@{js/go.js}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1 style="text-align: center; color: chartreuse">贴代码</h1>
+<br>
+<br>
+<form class="form-horizontal form-top" role="form" method="post" th:action="@{/}">
+    <div class="form-group">
+        <label for="inputQq" class="col-sm-4 control-label">Name:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputQq" placeholder="请输入您的代码名称" name="codeName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-sm-4 control-label">Language:</label>
+        <div class="col-sm-4">
+            <select class="form-control" name="language" id="language" onchange="light()">
+                <option>C</option>
+                <option>C++</option>
+                <option>Go</option>
+                <option>Java</option>
+                <option>JavaScript</option>
+                <option>Php</option>
+                <option>Python</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-sm-4 control-label">Code:</label>
+        <div class="col-sm-4">
+            <textarea class="form-control" rows="10" placeholder="请输入您的代码" name="code" id="editor"></textarea>
+        </div>
+    </div>
+    <div class="btn-z" style="text-align: center">
+        <input type="submit" value="paste" class="btn btn-success">
+    </div>
+</form>
+</body>
+<script type="text/javascript">
+
+    function codeTypes(language) {
+        language.trim();
+        if (language == "C")
+            return ("text/x-csrc");
+        if (language == "C++")
+            return ("text/x-c++src");
+        if (language == "Go")
+            return ("text/x-go");
+        if (language == "Java")
+            return ("text/x-java");
+        if (language == "JavaScript")
+            return ("text/javascript");
+        if (language == "Php")
+            return("application/x-httpd-php");
+        if (language == "Python")
+            return("text/x-cython");
+    }
+
+    var obj = document.getElementById("language");
+    var language = obj.value.toString();
+    language = codeTypes(language);
+    var myTextarea = document.getElementById('editor');
+    var CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+        mode: language,
+        lineNumbers: true
+    });
+    function light() {
+        language = obj.value.toString();
+        language = codeTypes(language);
+        CodeMirrorEditor.setOption("mode", language);
+    }
+</script>
+</html>
